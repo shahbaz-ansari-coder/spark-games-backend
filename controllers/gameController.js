@@ -7,32 +7,105 @@ export const addGame = async (req, res) => {
             name,
             price,
             category,
-            downloadLink,
             thumbnail,
-            screenshot,
+            screenshot1,
+            screenshot2,
+            screenshot3,
+            screenshot4,
             description,
-            systemRequirements
+            systemRequirements,
         } = req.body;
 
-        if (!name || !price || !category || !downloadLink || !thumbnail || !screenshot || !description || !systemRequirements) {
-            return res.status(400).json({ success: false, message: 'All fields are required' });
+        // Check required fields
+        if (
+            !name ||
+            !price ||
+            !category ||
+            !thumbnail ||
+            !screenshot1 ||
+            !screenshot2 ||
+            !screenshot3 ||
+            !screenshot4 ||
+            !description ||
+            !systemRequirements
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required",
+            });
         }
 
+        // Create new game
         const newGame = await Game.create({
             name,
             price,
             category,
-            downloadLink,
             thumbnail,
-            screenshot,
+            screenshot1,
+            screenshot2,
+            screenshot3,
+            screenshot4,
             description,
-            systemRequirements
+            systemRequirements,
         });
 
-        res.status(201).json({ success: true, message: 'Game added successfully', game: newGame });
+        res
+            .status(201)
+            .json({ success: true, message: "Game added successfully", game: newGame });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: 'Server error' });
+        console.error("Add Game Error:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+// Edit / Update game by ID
+export const editGame = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {
+            name,
+            price,
+            category,
+            thumbnail,
+            screenshot1,
+            screenshot2,
+            screenshot3,
+            screenshot4,
+            description,
+            systemRequirements,
+        } = req.body;
+
+        const updatedGame = await Game.findByIdAndUpdate(
+            id,
+            {
+                name,
+                price,
+                category,
+                thumbnail,
+                screenshot1,
+                screenshot2,
+                screenshot3,
+                screenshot4,
+                description,
+                systemRequirements,
+            },
+            { new: true } // return updated document
+        );
+
+        if (!updatedGame) {
+            return res
+                .status(404)
+                .json({ success: false, message: "Game not found" });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Game updated successfully",
+            game: updatedGame,
+        });
+    } catch (error) {
+        console.error("Edit Game Error:", error);
+        res.status(500).json({ success: false, message: "Server error" });
     }
 };
 

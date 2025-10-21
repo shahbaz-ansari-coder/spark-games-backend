@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.post('/login' , loginUser);
 router.post('/add', addGame);
+router.put('/update/:id', addGame);
 router.delete('/delete/:id', deleteGame);
 router.get('/get-all' ,  getAllGames)
 

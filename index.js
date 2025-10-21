@@ -19,5 +19,5 @@ app.use(cors());
 app.use('/api' , authRouter)
 
 app.listen(port, () => {
-    console.log(`✅ Server is up and running at http://localhost:${port}`);
+    console.log(`Server is up and running at http://localhost:${port}`);
 });
